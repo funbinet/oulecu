@@ -71,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text('Settings'),
       ),
       body: SafeArea(
         child: ListView(
@@ -103,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Icon(Icons.dark_mode, color: AppColors.primaryGold, size: 20),
                         const SizedBox(width: 12),
-                        const Expanded(
+                        Expanded(
                           child: Text(
                             'AMOLED (Pitch Black)',
                             style: TextStyle(
@@ -151,7 +151,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     final clean = value.startsWith('@') ? value : '@$value';
                     _settings.setUserHandle(clean);
                   },
-                  prefix: const Text(
+                  prefix: Text(
                     '@',
                     style: TextStyle(
                       color: AppColors.primaryGold,
@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       '#',
                       style: TextStyle(
                         color: AppColors.primaryGold,
@@ -200,7 +200,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const SizedBox(height: 16),
                 if (_hashtags.isEmpty)
-                  const Text(
+                  Text(
                     'No custom hashtags added yet.',
                     style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                   )
@@ -246,7 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Default Format',
                         style: TextStyle(
@@ -293,7 +293,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // Quality slider
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Quality:',
                       style: TextStyle(
                         color: AppColors.textSecondary,
@@ -363,7 +363,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // Default font
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Font',
                         style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
@@ -431,11 +431,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 ListTile(
                   leading: Icon(Icons.delete_sweep, color: AppColors.primaryGold),
-                  title: const Text(
+                  title: Text(
                     'Clear Cache',
                     style: TextStyle(color: AppColors.textPrimary),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Remove temporary files',
                     style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                   ),
@@ -451,11 +451,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 ListTile(
                   leading: Icon(Icons.delete_forever, color: AppColors.error),
-                  title: const Text(
+                  title: Text(
                     'Reset All Settings',
                     style: TextStyle(color: AppColors.error),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Restore default settings',
                     style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                   ),
@@ -464,18 +464,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       context: context,
                       builder: (context) => AlertDialog(
                         backgroundColor: AppColors.surface,
-                        title: const Text(
+                        title: Text(
                           'Reset All Settings?',
                           style: TextStyle(color: AppColors.textPrimary),
                         ),
-                        content: const Text(
+                        content: Text(
                           'This will restore all settings to their default values. This cannot be undone.',
                           style: TextStyle(color: AppColors.textSecondary),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('CANCEL'),
+                            child: Text('CANCEL'),
                           ),
                           ElevatedButton(
                             onPressed: () async {
@@ -487,7 +487,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               backgroundColor: AppColors.error,
                               foregroundColor: AppColors.textPrimary,
                             ),
-                            child: const Text('RESET'),
+                            child: Text('RESET'),
                           ),
                         ],
                       ),
@@ -503,7 +503,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 ListTile(
                   leading: Icon(Icons.info_outline, color: AppColors.primaryGold),
-                  title: const Text(
+                  title: Text(
                     'Version',
                     style: TextStyle(color: AppColors.textPrimary),
                   ),
@@ -517,7 +517,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 ListTile(
                   leading: Icon(Icons.person_outline, color: AppColors.primaryGold),
-                  title: const Text(
+                  title: Text(
                     'Creator',
                     style: TextStyle(color: AppColors.textPrimary),
                   ),
