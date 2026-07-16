@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/shape_utils.dart';
+
 import '../widgets/custom_button.dart';
 
 class PreviewScreen extends StatefulWidget {
@@ -49,7 +51,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     padding: const EdgeInsets.only(right: 16),
                     child: Text(
                       '${_currentIndex + 1}/${templates.length}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primaryGold,
                         fontSize: 14,
                         fontFamily: 'JetBrainsMono',
@@ -72,7 +74,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    border: const Border(top: BorderSide(color: AppColors.borderMuted)),
+                    border: Border(top: BorderSide(color: AppColors.borderMuted)),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -478,7 +480,7 @@ class _ExportFormatSheetState extends State<_ExportFormatSheet> {
                 ),
               ),
               child: isSelected
-                  ? const Center(
+                  ? Center(
                       child: Icon(
                         Icons.check,
                         size: 14,
@@ -503,7 +505,7 @@ class _ExportFormatSheetState extends State<_ExportFormatSheet> {
                   ),
                   Text(
                     description,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontSize: 12,
                     ),
@@ -518,7 +520,7 @@ class _ExportFormatSheetState extends State<_ExportFormatSheet> {
                   color: AppColors.primaryGold.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Text(
+                child: Text(
                   'DEFAULT',
                   style: TextStyle(
                     color: AppColors.primaryGold,

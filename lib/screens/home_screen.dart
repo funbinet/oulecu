@@ -7,6 +7,8 @@ import '../theme/app_theme.dart';
 import '../widgets/gold_input.dart';
 import '../widgets/text_editor_tools.dart';
 import '../widgets/custom_button.dart';
+import 'dart:convert';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _topicController;
   late TextEditingController _subtopicController;
-  late TextEditingController _contentController;
+  late quill.QuillController _quillController;
   final ImagePicker _imagePicker = ImagePicker();
 
   @override
@@ -27,12 +29,28 @@ class _HomeScreenState extends State<HomeScreen> {
     final appState = context.read<AppStateProvider>();
     _topicController = TextEditingController(text: appState.topic);
     _subtopicController = TextEditingController(text: appState.subtopic);
-    _contentController = TextEditingController(text: appState.content);
+    if (appState.cardConfig.quillDeltaJson != null && appState.cardConfig.quillDeltaJson!.isNotEmpty) {
+      try {
+        final doc = quill.Document.fromJson(jsonDecode(appState.cardConfig.quillDeltaJson!));
+        _quillController = quill.QuillController(document: doc, selection: const TextSelection.collapsed(offset: 0));
+      } catch (_) {
+        _quillController = quill.QuillController.basic();
+      }
+    } else {
+      _quillController = quill.QuillController.basic();
+      if (appState.content.isNotEmpty) {
+        _quillController.document.insert(0, appState.content);
+      }
+    }
 
     // Listen to text changes to update Next button and Discard state
     _topicController.addListener(_onInputChanged);
     _subtopicController.addListener(_onInputChanged);
-    _contentController.addListener(_onInputChanged);
+    _quillController.addListener(() {
+      final jsonStr = jsonEncode(_quillController.document.toDelta().toJson());
+      context.read<AppStateProvider>().setQuillDeltaJson(jsonStr);
+      _onInputChanged();
+    });
   }
 
   void _onInputChanged() {
@@ -43,21 +61,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _topicController.removeListener(_onInputChanged);
     _subtopicController.removeListener(_onInputChanged);
-    _contentController.removeListener(_onInputChanged);
+    _quillController.dispose();
     _topicController.dispose();
     _subtopicController.dispose();
-    _contentController.dispose();
     super.dispose();
   }
 
   bool get _hasContent {
     return _topicController.text.trim().isNotEmpty ||
         _subtopicController.text.trim().isNotEmpty ||
-        _contentController.text.trim().isNotEmpty;
+        _quillController.document.toPlainText().trim().isNotEmpty;
   }
 
   bool get _canProceed {
-    return _contentController.text.isNotEmpty ||
+    return _quillController.document.toPlainText().trim().isNotEmpty ||
         context.read<AppStateProvider>().cardConfig.contentImageBytes != null;
   }
 
@@ -77,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'assets/images/logo.png',
                   width: 28,
                   height: 28,
-                  errorBuilder: (_, __, ___) => const Icon(
+                  errorBuilder: (_, __, ___) => Icon(
                     Icons.image,
                     color: AppColors.primaryGold,
                     size: 28,
@@ -119,29 +136,36 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Content text area with styling applied
                         _buildContentArea(appState),
                         const SizedBox(height: 12),
-                        // Text editing tools
-                        TextEditorTools(
-                          isBold: appState.cardConfig.fontWeight == FontWeight.bold,
-                          isItalic: appState.cardConfig.fontStyle == FontStyle.italic,
-                          textAlign: appState.cardConfig.textAlign,
-                          fontSize: appState.cardConfig.fontSize,
-                          onBoldToggle: (isBold) {
-                            appState.setFontWeight(
-                              isBold ? FontWeight.bold : FontWeight.normal,
-                            );
-                          },
-                          onItalicToggle: (isItalic) {
-                            appState.setFontStyle(
-                              isItalic ? FontStyle.italic : FontStyle.normal,
-                            );
-                          },
-                          onAlignChange: appState.setTextAlign,
-                          onFontSizeChange: appState.setFontSize,
-                          onImagePick: () => _showImagePicker(context, appState),
-                          onUndo: appState.undo,
-                          onRedo: appState.redo,
-                          canUndo: appState.canUndo,
-                          canRedo: appState.canRedo,
+                        // Quill Toolbar
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: quill.QuillSimpleToolbar(
+                            controller: _quillController,
+                            config: quill.QuillSimpleToolbarConfig(
+                              showFontFamily: false,
+                              showFontSize: false,
+                              showListNumbers: true,
+                              showListBullets: true,
+                              showIndent: false,
+                              showLink: true,
+                              showCodeBlock: false,
+                              showInlineCode: false,
+                              showSearchButton: false,
+                              showSubscript: false,
+                              showSuperscript: false,
+                              showDirection: false,
+                              showUndo: true,
+                              showRedo: true,
+                              showBackgroundColorButton: false,
+                              showColorButton: true,
+                              customButtons: [
+                                quill.QuillToolbarCustomButtonOptions(
+                                  icon: const Icon(Icons.image),
+                                  onPressed: () => _showImagePicker(context, appState),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -152,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    border: const Border(
+                    border: Border(
                       top: BorderSide(color: AppColors.borderMuted, width: 1),
                     ),
                   ),
@@ -164,10 +188,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           onDiscard: () {
                             _topicController.clear();
                             _subtopicController.clear();
-                            _contentController.clear();
+                            _quillController.document = quill.Document();
                             appState.setTopic('');
                             appState.setSubtopic('');
-                            appState.setContent('');
+                            appState.setQuillDeltaJson('');
                             appState.setContentImage(null, null);
                           },
                         ),
@@ -176,11 +200,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 140,
                           child: GoldButton(
                             label: 'NEXT',
-                            onPressed: (_contentController.text.isNotEmpty || hasImage)
+                            onPressed: (_quillController.document.toPlainText().trim().isNotEmpty || hasImage)
                                 ? () {
                                     appState.setTopic(_topicController.text);
                                     appState.setSubtopic(_subtopicController.text);
-                                    appState.setContent(_contentController.text);
                                     appState.goNext();
                                   }
                                 : null,
@@ -225,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: double.infinity,
                       height: 200,
                       color: AppColors.surfaceLight,
-                      child: const Center(
+                      child: Center(
                         child: Icon(Icons.broken_image, color: AppColors.textMuted, size: 48),
                       ),
                     ),
@@ -238,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => appState.setContentImage(null, null),
                     child: Container(
                       padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.error,
                         shape: BoxShape.circle,
                       ),
@@ -252,18 +275,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-          // Content text field — now with dynamic styling from toolbar
-          GoldTextArea(
-            label: 'CONTENT',
-            hint: 'Type your content here...',
-            controller: _contentController,
-            onChanged: (value) {
-              appState.setContent(value);
-            },
-            maxLines: 12,
-            fontWeight: appState.cardConfig.fontWeight,
-            fontStyle: appState.cardConfig.fontStyle,
-            textAlign: appState.cardConfig.textAlign,
+          // Content text field — now with Quill Editor
+          Container(
+            padding: const EdgeInsets.all(12),
+            height: 250,
+            child: quill.QuillEditor.basic(
+              controller: _quillController,
+              config: const quill.QuillEditorConfig(),
+            ),
           ),
         ],
       ),
@@ -289,12 +308,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 24),
               ListTile(
-                leading: const Icon(Icons.photo_library_outlined, color: AppColors.primaryGold),
-                title: const Text(
+                leading: Icon(Icons.photo_library_outlined, color: AppColors.primaryGold),
+                title: Text(
                   'Gallery',
                   style: TextStyle(color: AppColors.textPrimary),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'Choose from your photos',
                   style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                 ),
@@ -322,12 +341,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const Divider(color: AppColors.divider),
               ListTile(
-                leading: const Icon(Icons.camera_alt_outlined, color: AppColors.primaryGold),
-                title: const Text(
+                leading: Icon(Icons.camera_alt_outlined, color: AppColors.primaryGold),
+                title: Text(
                   'Camera',
                   style: TextStyle(color: AppColors.textPrimary),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'Take a new photo',
                   style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                 ),

@@ -122,7 +122,7 @@ class _TemplateScreenState extends State<TemplateScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    border: const Border(top: BorderSide(color: AppColors.borderMuted)),
+                    border: Border(top: BorderSide(color: AppColors.borderMuted)),
                   ),
                   child: ActionButtons(
                     onBack: () => appState.goBack(),

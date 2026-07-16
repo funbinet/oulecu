@@ -202,8 +202,15 @@ class AppStateProvider extends ChangeNotifier {
       case CreationStep.export:
         _currentStep = CreationStep.home;
         _resetWorkflow();
-        return;
+        break; // Changed from return to break so notifyListeners is called
     }
+    notifyListeners();
+  }
+
+  /// Reset workflow completely (called when manually navigating to Home)
+  void resetToHome() {
+    _currentStep = CreationStep.home;
+    _resetWorkflow();
     notifyListeners();
   }
 
@@ -248,6 +255,11 @@ class AppStateProvider extends ChangeNotifier {
   void setContent(String value) {
     _saveStateForUndo();
     _cardConfig = _cardConfig.copyWith(content: value);
+    notifyListeners();
+  }
+
+  void setQuillDeltaJson(String json) {
+    _cardConfig = _cardConfig.copyWith(quillDeltaJson: json);
     notifyListeners();
   }
 

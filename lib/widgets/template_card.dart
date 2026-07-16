@@ -149,7 +149,7 @@ class TemplateCard extends StatelessWidget {
                 right: 8,
                 child: Container(
                   padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.primaryGold,
                     shape: BoxShape.circle,
                   ),

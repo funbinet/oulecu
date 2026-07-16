@@ -79,7 +79,7 @@ class _GenerationScreenState extends State<GenerationScreen> {
                         const SizedBox(height: 16),
                         Text(
                           '${(appState.progress * 100).toInt()}%',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primaryGold,
                             fontSize: 14,
                             fontFamily: 'JetBrainsMono',
@@ -108,7 +108,7 @@ class _GenerationScreenState extends State<GenerationScreen> {
             color: AppColors.success.withOpacity(0.1),
             border: Border.all(color: AppColors.success.withOpacity(0.3), width: 2),
           ),
-          child: const Icon(
+          child: Icon(
             Icons.check,
             size: 40,
             color: AppColors.success,
@@ -150,7 +150,7 @@ class _GenerationScreenState extends State<GenerationScreen> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.image,
                           size: 16,
                           color: AppColors.success,
@@ -159,7 +159,7 @@ class _GenerationScreenState extends State<GenerationScreen> {
                         Expanded(
                           child: Text(
                             fileName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 12,
                               fontFamily: 'JetBrainsMono',
@@ -190,7 +190,7 @@ class _GenerationScreenState extends State<GenerationScreen> {
               GoldButton(
                 label: 'Create Another',
                 onPressed: () {
-                  appState.setStep(CreationStep.home);
+                  appState.resetToHome();
                 },
                 isOutlined: true,
               ),

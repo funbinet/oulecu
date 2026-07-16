@@ -45,7 +45,7 @@ class GoldInput extends StatelessWidget {
       textInputAction: textInputAction,
       autofocus: autofocus,
       focusNode: focusNode,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 15,
         fontFamily: 'JetBrainsMono',

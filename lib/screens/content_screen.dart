@@ -121,7 +121,7 @@ class _ContentScreenState extends State<ContentScreen> {
             // Content grid
             Expanded(
               child: _isLoading
-                  ? const Center(
+                  ? Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryGold),
                       ),
@@ -216,7 +216,7 @@ class _ContentScreenState extends State<ContentScreen> {
                   child: Image.file(
                     File(card.filePath),
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const Icon(
+                    errorBuilder: (_, __, ___) => Icon(
                       Icons.broken_image,
                       color: AppColors.textMuted,
                     ),
@@ -226,7 +226,7 @@ class _ContentScreenState extends State<ContentScreen> {
               const SizedBox(height: 8),
               Text(
                 card.filePath.split('/').last,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12,
                   fontFamily: 'JetBrainsMono',
@@ -235,16 +235,16 @@ class _ContentScreenState extends State<ContentScreen> {
               const SizedBox(height: 16),
               const Divider(color: AppColors.divider),
               ListTile(
-                leading: const Icon(Icons.visibility, color: AppColors.primaryGold),
-                title: const Text('View', style: TextStyle(color: AppColors.textPrimary)),
+                leading: Icon(Icons.visibility, color: AppColors.primaryGold),
+                title: Text('View', style: TextStyle(color: AppColors.textPrimary)),
                 onTap: () {
                   Navigator.pop(context);
                   _showFullImage(context, card);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.share, color: AppColors.primaryGold),
-                title: const Text('Share', style: TextStyle(color: AppColors.textPrimary)),
+                leading: Icon(Icons.share, color: AppColors.primaryGold),
+                title: Text('Share', style: TextStyle(color: AppColors.textPrimary)),
                 onTap: () async {
                   Navigator.pop(context);
                   await Share.shareXFiles(
@@ -254,8 +254,8 @@ class _ContentScreenState extends State<ContentScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete, color: AppColors.error),
-                title: const Text('Delete', style: TextStyle(color: AppColors.error)),
+                leading: Icon(Icons.delete, color: AppColors.error),
+                title: Text('Delete', style: TextStyle(color: AppColors.error)),
                 onTap: () async {
                   Navigator.pop(context);
                   await _storage.deleteGeneratedCard(card.id!);
@@ -285,7 +285,7 @@ class _ContentScreenState extends State<ContentScreen> {
               errorBuilder: (_, __, ___) => Container(
                 color: AppColors.surface,
                 padding: const EdgeInsets.all(32),
-                child: const Icon(
+                child: Icon(
                   Icons.broken_image,
                   size: 64,
                   color: AppColors.textMuted,
@@ -335,7 +335,7 @@ class _ImageCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     card.filePath.split('/').last,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontSize: 10,
                       fontFamily: 'JetBrainsMono',

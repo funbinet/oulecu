@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
+import 'package:archive/archive_io.dart';
+
 import '../models/card_config.dart';
 
 class GeneratedCard {
@@ -161,6 +163,48 @@ class StorageService {
       }
     }
     await db.delete('generated_cards');
+  }
+
+  Future<int> calculateExportSize() async {
+    final cards = await getAllGeneratedCards();
+    int totalSize = 0;
+    for (final card in cards) {
+      final file = File(card.filePath);
+      if (await file.exists()) {
+        totalSize += await file.length();
+      }
+    }
+    return totalSize;
+  }
+
+  // Export All to Zip
+  Future<String?> exportAllToZip() async {
+    final cards = await getAllGeneratedCards();
+    if (cards.isEmpty) return null;
+
+    final encoder = ZipFileEncoder();
+    final downloadsDir = await getDownloadsDirectory();
+    final zipPath = path.join(downloadsDir, 'oulecu_export_${DateTime.now().millisecondsSinceEpoch}.zip');
+    
+    encoder.create(zipPath);
+    bool addedAny = false;
+    for (final card in cards) {
+      final file = File(card.filePath);
+      if (await file.exists()) {
+        encoder.addFile(file);
+        addedAny = true;
+      }
+    }
+    
+    encoder.close();
+    
+    if (!addedAny) {
+      final zfile = File(zipPath);
+      if (await zfile.exists()) await zfile.delete();
+      return null;
+    }
+
+    return zipPath;
   }
 
   // File Operations

@@ -8,6 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import '../models/card_config.dart';
 import '../models/template.dart';
+import '../utils/delta_to_textspan.dart';
+import '../utils/shape_utils.dart';
+
 import 'storage_service.dart';
 
 class RenderService {
@@ -168,19 +171,25 @@ class RenderService {
 
     // 4. Content text
     TextPainter? contentPainter;
-    if (config.content.isNotEmpty) {
+    if (config.quillDeltaJson?.isNotEmpty == true || config.content.isNotEmpty) {
+      final baseStyle = TextStyle(
+        color: template.textColor,
+        fontSize: config.fontSize,
+        fontWeight: config.fontWeight,
+        fontStyle: config.fontStyle,
+        fontFamily: config.fontFamily,
+        height: 1.5,
+      );
+
+      TextSpan textSpan;
+      if (config.quillDeltaJson != null && config.quillDeltaJson!.isNotEmpty) {
+        textSpan = convertDeltaToTextSpan(config.quillDeltaJson!, baseStyle);
+      } else {
+        textSpan = TextSpan(text: config.content, style: baseStyle);
+      }
+
       contentPainter = TextPainter(
-        text: TextSpan(
-          text: config.content,
-          style: TextStyle(
-            color: template.textColor,
-            fontSize: config.fontSize,
-            fontWeight: config.fontWeight,
-            fontStyle: config.fontStyle,
-            fontFamily: config.fontFamily,
-            height: 1.5,
-          ),
-        ),
+        text: textSpan,
         textDirection: TextDirection.ltr,
         textAlign: config.textAlign,
       );
@@ -242,36 +251,36 @@ class RenderService {
     final double boxY = (cardH - boxHeight) / 2;
 
     // === DRAW THE CONTENT BOX ===
-    final boxRect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(boxX, boxY, boxWidth, boxHeight),
-      Radius.circular(config.cornerRadius.clamp(8, 24)),
-    );
+    final rawRect = Rect.fromLTWH(boxX, boxY, boxWidth, boxHeight);
+    final boxPath = getCornerPath(rawRect, config.cornerStyle, config.cornerRadius);
 
-    // Content box background — use template text color as base, derive a light/dark box
-    // The box color is driven by the template: white for light templates, dark surface for dark ones
     final boxBgColor = _getContentBoxColor(template);
 
     // Shadow for content box
-    final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.15)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
-    canvas.drawRRect(
-      boxRect.shift(const Offset(0, 4)),
-      shadowPaint,
-    );
+    if (config.shadowEnabled) {
+      final shadowPaint = Paint()
+        ..color = config.shadowColor
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, config.shadowBlur);
+      
+      canvas.save();
+      canvas.translate(config.shadowOffsetX, config.shadowOffsetY);
+      // To simulate spread, we could scale, but a simple offset + blur is what we do here
+      canvas.drawPath(boxPath, shadowPaint);
+      canvas.restore();
+    }
 
     // Box background
     final boxPaint = Paint()
       ..color = boxBgColor
       ..style = PaintingStyle.fill;
-    canvas.drawRRect(boxRect, boxPaint);
+    canvas.drawPath(boxPath, boxPaint);
 
-    // Box border (Template Accent Color)
+    // Box border
     final borderPaint = Paint()
-      ..color = template.accentColor
+      ..color = config.borderColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
-    canvas.drawRRect(boxRect, borderPaint);
+      ..strokeWidth = config.borderWidth > 0 ? config.borderWidth : 2.0;
+    canvas.drawPath(boxPath, borderPaint);
 
     // === DRAW CONTENT INSIDE THE BOX ===
     double currentY = boxY + innerPadding;
@@ -326,18 +335,24 @@ class RenderService {
 
     // 4. Content text
     if (contentPainter != null) {
+      final baseStyle = TextStyle(
+        color: contentTextColor,
+        fontSize: config.fontSize,
+        fontWeight: config.fontWeight,
+        fontStyle: config.fontStyle,
+        fontFamily: config.fontFamily,
+        height: 1.5,
+      );
+
+      TextSpan textSpan;
+      if (config.quillDeltaJson != null && config.quillDeltaJson!.isNotEmpty) {
+        textSpan = convertDeltaToTextSpan(config.quillDeltaJson!, baseStyle);
+      } else {
+        textSpan = TextSpan(text: config.content, style: baseStyle);
+      }
+
       final cp = TextPainter(
-        text: TextSpan(
-          text: config.content,
-          style: TextStyle(
-            color: contentTextColor,
-            fontSize: config.fontSize,
-            fontWeight: config.fontWeight,
-            fontStyle: config.fontStyle,
-            fontFamily: config.fontFamily,
-            height: 1.5,
-          ),
-        ),
+        text: textSpan,
         textDirection: TextDirection.ltr,
         textAlign: config.textAlign,
       );

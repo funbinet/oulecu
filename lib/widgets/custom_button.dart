@@ -131,11 +131,11 @@ class DiscardButton extends StatelessWidget {
                 context: context,
                 builder: (context) => AlertDialog(
                   backgroundColor: AppColors.surface,
-                  title: const Text(
+                  title: Text(
                     'Discard Changes?',
                     style: TextStyle(color: AppColors.textPrimary),
                   ),
-                  content: const Text(
+                  content: Text(
                     'Are you sure you want to discard all your changes? This action cannot be undone.',
                     style: TextStyle(color: AppColors.textSecondary),
                   ),

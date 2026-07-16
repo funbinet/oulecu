@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/shape_utils.dart';
+
 import '../utils/constants.dart';
 import '../widgets/gold_input.dart';
 import '../widgets/custom_button.dart';
@@ -104,7 +106,7 @@ class _EditScreenState extends State<EditScreen> {
                                             : null,
                                       ),
                                       child: appState.cardConfig.avatarBytes == null
-                                          ? const Icon(
+                                          ? Icon(
                                               Icons.person,
                                               size: 36,
                                               color: AppColors.primaryGold,
@@ -116,7 +118,7 @@ class _EditScreenState extends State<EditScreen> {
                                       right: 0,
                                       child: Container(
                                         padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color: AppColors.primaryGold,
                                           shape: BoxShape.circle,
                                         ),
@@ -145,7 +147,7 @@ class _EditScreenState extends State<EditScreen> {
                                       label: 'HANDLE',
                                       controller: _handleController,
                                       onChanged: appState.setHandle,
-                                      prefix: const Text(
+                                      prefix: Text(
                                         '@',
                                         style: TextStyle(
                                           color: AppColors.primaryGold,
@@ -272,7 +274,7 @@ class _EditScreenState extends State<EditScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    border: const Border(
+                    border: Border(
                       top: BorderSide(color: AppColors.borderMuted),
                     ),
                   ),
@@ -308,8 +310,8 @@ class _EditScreenState extends State<EditScreen> {
               ),
               const SizedBox(height: 24),
               ListTile(
-                leading: const Icon(Icons.photo_library, color: AppColors.primaryGold),
-                title: const Text('Gallery', style: TextStyle(color: AppColors.textPrimary)),
+                leading: Icon(Icons.photo_library, color: AppColors.primaryGold),
+                title: Text('Gallery', style: TextStyle(color: AppColors.textPrimary)),
                 onTap: () async {
                   Navigator.pop(context);
                   final picked = await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -321,8 +323,8 @@ class _EditScreenState extends State<EditScreen> {
               ),
               const Divider(color: AppColors.divider),
               ListTile(
-                leading: const Icon(Icons.camera_alt, color: AppColors.primaryGold),
-                title: const Text('Camera', style: TextStyle(color: AppColors.textPrimary)),
+                leading: Icon(Icons.camera_alt, color: AppColors.primaryGold),
+                title: Text('Camera', style: TextStyle(color: AppColors.textPrimary)),
                 onTap: () async {
                   Navigator.pop(context);
                   final picked = await _imagePicker.pickImage(source: ImageSource.camera);
@@ -365,7 +367,7 @@ class _ToggleItem extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 14,
               ),

@@ -28,6 +28,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late TextEditingController _nameController;
   late TextEditingController _handleController;
   late TextEditingController _hashtagController;
+  late TextEditingController _fontSizeController;
+  late TextEditingController _widthController;
+  late TextEditingController _heightController;
   int _quality = 90;
   List<String> _hashtags = [];
 
@@ -38,6 +41,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _nameController = TextEditingController(text: _settings.getUserName());
     _handleController = TextEditingController(text: _settings.getUserHandle());
     _hashtagController = TextEditingController();
+    _fontSizeController = TextEditingController(text: _settings.getDefaultFontSize().toString());
+    _widthController = TextEditingController(text: _settings.getDefaultCardWidth().toString());
+    _heightController = TextEditingController(text: _settings.getDefaultCardHeight().toString());
     _quality = _settings.getExportQuality();
     _hashtags = _hashtagService.getAllHashtags();
   }
@@ -54,6 +60,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _nameController.dispose();
     _handleController.dispose();
     _hashtagController.dispose();
+    _fontSizeController.dispose();
+    _widthController.dispose();
+    _heightController.dispose();
     super.dispose();
   }
 
@@ -71,6 +80,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // App Customization
             _SettingsSection(
               title: 'App Customization',
+              onSave: () async {
+                final appState = context.read<AppStateProvider>();
+                await appState.init();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Saved successfully')),
+                  );
+                }
+              },
               children: [
                 GoldInput(
                   label: 'App Name',
@@ -83,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   builder: (context, themeProvider, child) {
                     return Row(
                       children: [
-                        const Icon(Icons.dark_mode, color: AppColors.primaryGold, size: 20),
+                        Icon(Icons.dark_mode, color: AppColors.primaryGold, size: 20),
                         const SizedBox(width: 12),
                         const Expanded(
                           child: Text(
@@ -110,6 +128,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // User Profile
             _SettingsSection(
               title: 'User Profile',
+              onSave: () async {
+                final appState = context.read<AppStateProvider>();
+                await appState.init();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Saved successfully')),
+                  );
+                }
+              },
               children: [
                 GoldInput(
                   label: 'Name',
@@ -185,19 +212,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       return Chip(
                         label: Text(
                           '#$tag',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primaryGold,
                             fontSize: 12,
                             fontFamily: 'JetBrainsMono',
                           ),
                         ),
                         backgroundColor: AppColors.surface,
-                        deleteIcon: const Icon(Icons.close, size: 16, color: AppColors.textSecondary),
+                        deleteIcon: Icon(Icons.close, size: 16, color: AppColors.textSecondary),
                         onDeleted: () async {
                           await _hashtagService.removeHashtag(tag);
                           _loadHashtags();
                         },
-                        side: const BorderSide(color: AppColors.borderMuted),
+                        side: BorderSide(color: AppColors.borderMuted),
                       );
                     }).toList(),
                   ),
@@ -207,6 +234,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // Export Settings
             _SettingsSection(
               title: 'Export Settings',
+              onSave: () async {
+                final appState = context.read<AppStateProvider>();
+                await appState.init();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Saved successfully')),
+                  );
+                }
+              },
               children: [
                 Row(
                   children: [
@@ -230,8 +266,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: DropdownButton<String>(
                           value: _settings.getDefaultFormat(),
                           dropdownColor: AppColors.surface,
-                          icon: const Icon(Icons.arrow_drop_down, color: AppColors.primaryGold),
-                          style: const TextStyle(
+                          icon: Icon(Icons.arrow_drop_down, color: AppColors.primaryGold),
+                          style: TextStyle(
                             color: AppColors.textPrimary,
                             fontFamily: 'JetBrainsMono',
                             fontSize: 14,
@@ -284,7 +320,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Text(
                       '$_quality%',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primaryGold,
                         fontFamily: 'JetBrainsMono',
                         fontSize: 13,
@@ -298,7 +334,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // Card Defaults
             _SettingsSection(
               title: 'Card Defaults',
+              onSave: () async {
+                final fontSize = double.tryParse(_fontSizeController.text) ?? 16.0;
+                final width = double.tryParse(_widthController.text) ?? 1080.0;
+                final height = double.tryParse(_heightController.text) ?? 1080.0;
+                await _settings.setDefaultFontSize(fontSize);
+                await _settings.setDefaultCardWidth(width);
+                await _settings.setDefaultCardHeight(height);
+                final appState = context.read<AppStateProvider>();
+                await appState.init();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Saved successfully')),
+                  );
+                }
+              },
               children: [
+                Row(
+                  children: [
+                    Expanded(child: GoldInput(label: 'Width', controller: _widthController, keyboardType: TextInputType.number)),
+                    const SizedBox(width: 16),
+                    Expanded(child: GoldInput(label: 'Height', controller: _heightController, keyboardType: TextInputType.number)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                GoldInput(label: 'Font Size', controller: _fontSizeController, keyboardType: TextInputType.number),
+                const SizedBox(height: 16),
                 // Default font
                 Row(
                   children: [
@@ -319,8 +380,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: DropdownButton<String>(
                           value: _settings.getDefaultFont(),
                           dropdownColor: AppColors.surface,
-                          icon: const Icon(Icons.arrow_drop_down, color: AppColors.primaryGold),
-                          style: const TextStyle(
+                          icon: Icon(Icons.arrow_drop_down, color: AppColors.primaryGold),
+                          style: TextStyle(
                             color: AppColors.textPrimary,
                             fontFamily: 'JetBrainsMono',
                             fontSize: 14,
@@ -369,7 +430,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: 'Storage',
               children: [
                 ListTile(
-                  leading: const Icon(Icons.delete_sweep, color: AppColors.primaryGold),
+                  leading: Icon(Icons.delete_sweep, color: AppColors.primaryGold),
                   title: const Text(
                     'Clear Cache',
                     style: TextStyle(color: AppColors.textPrimary),
@@ -378,7 +439,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'Remove temporary files',
                     style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                   ),
-                  trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
+                  trailing: Icon(Icons.chevron_right, color: AppColors.textMuted),
                   onTap: () async {
                     await _storage.clearCache();
                     if (mounted) {
@@ -389,7 +450,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.delete_forever, color: AppColors.error),
+                  leading: Icon(Icons.delete_forever, color: AppColors.error),
                   title: const Text(
                     'Reset All Settings',
                     style: TextStyle(color: AppColors.error),
@@ -441,28 +502,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: 'About',
               children: [
                 ListTile(
-                  leading: const Icon(Icons.info_outline, color: AppColors.primaryGold),
+                  leading: Icon(Icons.info_outline, color: AppColors.primaryGold),
                   title: const Text(
                     'Version',
                     style: TextStyle(color: AppColors.textPrimary),
                   ),
                   trailing: Text(
                     AppConstants.appVersion,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontFamily: 'JetBrainsMono',
                     ),
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.person_outline, color: AppColors.primaryGold),
+                  leading: Icon(Icons.person_outline, color: AppColors.primaryGold),
                   title: const Text(
                     'Creator',
                     style: TextStyle(color: AppColors.textPrimary),
                   ),
                   trailing: Text(
                     AppConstants.creatorName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontFamily: 'JetBrainsMono',
                     ),
@@ -496,10 +557,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 class _SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final VoidCallback? onSave;
 
   const _SettingsSection({
     required this.title,
     required this.children,
+    this.onSave,
   });
 
   @override
@@ -515,15 +578,27 @@ class _SettingsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title.toUpperCase(),
-            style: const TextStyle(
-              color: AppColors.primaryGold,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'JetBrainsMono',
-              letterSpacing: 2,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title.toUpperCase(),
+                style: TextStyle(
+                  color: AppColors.primaryGold,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'JetBrainsMono',
+                  letterSpacing: 2,
+                ),
+              ),
+              if (onSave != null)
+                IconButton(
+                  icon: Icon(Icons.check, color: AppColors.primaryGold, size: 20),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: onSave,
+                ),
+            ],
           ),
           const SizedBox(height: 16),
           ...children,

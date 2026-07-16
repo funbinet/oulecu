@@ -7,45 +7,45 @@ class AppColors {
   // Core Colors
   static bool isAmoled = true;
 
-  static Color get background => isAmoled ? const Color(0xFF000000) : const Color(0xFF161616);
-  static Color get surface => isAmoled ? const Color(0xFF0A0A0A) : const Color(0xFF222222);
-  static Color get surfaceLight => isAmoled ? const Color(0xFF141414) : const Color(0xFF2A2A2A);
+  static Color get background => isAmoled ? Color(0xFF000000) : Color(0xFF161616);
+  static Color get surface => isAmoled ? Color(0xFF0A0A0A) : Color(0xFF222222);
+  static Color get surfaceLight => isAmoled ? Color(0xFF141414) : Color(0xFF2A2A2A);
   
-  static Color getBackground(bool isAmoled) => isAmoled ? const Color(0xFF000000) : const Color(0xFF161616);
-  static Color getSurface(bool isAmoled) => isAmoled ? const Color(0xFF0A0A0A) : const Color(0xFF222222);
-  static Color getSurfaceLight(bool isAmoled) => isAmoled ? const Color(0xFF141414) : const Color(0xFF2A2A2A);
+  static Color getBackground(bool isAmoled) => isAmoled ? Color(0xFF000000) : Color(0xFF161616);
+  static Color getSurface(bool isAmoled) => isAmoled ? Color(0xFF0A0A0A) : Color(0xFF222222);
+  static Color getSurfaceLight(bool isAmoled) => isAmoled ? Color(0xFF141414) : Color(0xFF2A2A2A);
   
-  static const Color primaryGold = Color(0xFFFFD700);
-  static const Color secondaryGold = Color(0xFFC9A800);
-  static const Color goldGlow = Color(0x33FFD700);
-  static const Color goldLight = Color(0xFFFFE44D);
-  static const Color goldDark = Color(0xFF998200);
+  static Color primaryGold = Color(0xFFFFD700);
+  static Color secondaryGold = Color(0xFFC9A800);
+  static Color goldGlow = Color(0x33FFD700);
+  static Color goldLight = Color(0xFFFFE44D);
+  static Color goldDark = Color(0xFF998200);
 
   // Text Colors
-  static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFFB0B0B0);
-  static const Color textMuted = Color(0xFF666666);
-  static const Color textGold = Color(0xFFFFD700);
+  static Color textPrimary = Color(0xFFFFFFFF);
+  static Color textSecondary = Color(0xFFB0B0B0);
+  static Color textMuted = Color(0xFF666666);
+  static Color textGold = Color(0xFFFFD700);
 
   // Status Colors
-  static const Color error = Color(0xFFFF4444);
-  static const Color success = Color(0xFF44FF44);
-  static const Color warning = Color(0xFFFFAA00);
-  static const Color info = Color(0xFF4499FF);
+  static Color error = Color(0xFFFF4444);
+  static Color success = Color(0xFF44FF44);
+  static Color warning = Color(0xFFFFAA00);
+  static Color info = Color(0xFF4499FF);
 
   // Border & Divider
-  static const Color border = Color(0xFFFFD700);
-  static const Color borderMuted = Color(0x33FFD700);
+  static Color border = Color(0xFFFFD700);
+  static Color borderMuted = Color(0x33FFD700);
   static const Color divider = Color(0xFF1A1A1A);
 
   // Gradients
-  static const LinearGradient goldGradient = LinearGradient(
+  static LinearGradient goldGradient = LinearGradient(
     colors: [primaryGold, secondaryGold],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  static const LinearGradient goldGradientHorizontal = LinearGradient(
+  static LinearGradient goldGradientHorizontal = LinearGradient(
     colors: [primaryGold, secondaryGold],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
@@ -57,11 +57,41 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const LinearGradient brandGradient = LinearGradient(
+  static LinearGradient brandGradient = LinearGradient(
     colors: [primaryGold, secondaryGold],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
+
+  
+  static void setAccentColor(Color color) {
+    primaryGold = color;
+    // Auto-calculate derivative colors based on HSL or just opacity
+    final hsl = HSLColor.fromColor(color);
+    secondaryGold = hsl.withLightness((hsl.lightness - 0.15).clamp(0.0, 1.0)).toColor();
+    goldLight = hsl.withLightness((hsl.lightness + 0.15).clamp(0.0, 1.0)).toColor();
+    goldDark = hsl.withLightness((hsl.lightness - 0.25).clamp(0.0, 1.0)).toColor();
+    goldGlow = color.withValues(alpha: 0.2);
+    textGold = color;
+    border = color;
+    borderMuted = color.withValues(alpha: 0.2);
+    
+    goldGradient = LinearGradient(
+      colors: [primaryGold, secondaryGold],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+    goldGradientHorizontal = LinearGradient(
+      colors: [primaryGold, secondaryGold],
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    );
+    brandGradient = LinearGradient(
+      colors: [primaryGold, secondaryGold],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    );
+  }
 
   static LinearGradient get shimmerGradient => LinearGradient(
     colors: [surface, surfaceLight],
@@ -102,13 +132,13 @@ class AppTheme {
         foregroundColor: AppColors.primaryGold,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           color: AppColors.primaryGold,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           letterSpacing: 2,
         ),
-        iconTheme: const IconThemeData(color: AppColors.primaryGold),
+        iconTheme: IconThemeData(color: AppColors.primaryGold),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,
@@ -142,26 +172,26 @@ class AppTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primaryGold, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primaryGold, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primaryGold, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primaryGold, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primaryGold, width: 2.5),
+          borderSide: BorderSide(color: AppColors.primaryGold, width: 2.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderSide: BorderSide(color: AppColors.error, width: 1.5),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.error, width: 2.5),
+          borderSide: BorderSide(color: AppColors.error, width: 2.5),
         ),
-        labelStyle: const TextStyle(color: AppColors.textSecondary),
-        hintStyle: const TextStyle(color: AppColors.textMuted),
+        labelStyle: TextStyle(color: AppColors.textSecondary),
+        hintStyle: TextStyle(color: AppColors.textMuted),
         prefixIconColor: AppColors.primaryGold,
         suffixIconColor: AppColors.primaryGold,
       ),
@@ -184,7 +214,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primaryGold,
-          side: const BorderSide(color: AppColors.primaryGold, width: 1.5),
+          side: BorderSide(color: AppColors.primaryGold, width: 1.5),
           minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           textStyle: const TextStyle(
@@ -210,7 +240,7 @@ class AppTheme {
         shadowColor: AppColors.goldGlow,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: AppColors.borderMuted, width: 1),
+          side: BorderSide(color: AppColors.borderMuted, width: 1),
         ),
       ),
       // Dividers
@@ -242,7 +272,7 @@ class AppTheme {
           return Colors.transparent;
         }),
         checkColor: MaterialStateProperty.all(background),
-        side: const BorderSide(color: AppColors.primaryGold, width: 1.5),
+        side: BorderSide(color: AppColors.primaryGold, width: 1.5),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
       // Radio
@@ -268,21 +298,21 @@ class AppTheme {
         elevation: 8,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.borderMuted, width: 1),
+          side: BorderSide(color: AppColors.borderMuted, width: 1),
         ),
       ),
       // SnackBar
       snackBarTheme: SnackBarThemeData(
         backgroundColor: surfaceLight,
-        contentTextStyle: const TextStyle(color: AppColors.textPrimary),
+        contentTextStyle: TextStyle(color: AppColors.textPrimary),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: AppColors.borderMuted, width: 1),
+          side: BorderSide(color: AppColors.borderMuted, width: 1),
         ),
         behavior: SnackBarBehavior.floating,
       ),
       // Text
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         displayLarge: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 32,

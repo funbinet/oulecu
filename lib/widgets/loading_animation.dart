@@ -97,7 +97,7 @@ class _HackerLoadingAnimationState extends State<HackerLoadingAnimation>
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               backgroundColor: AppColors.surfaceLight,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryGold),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryGold),
               minHeight: 4,
             ),
           ),

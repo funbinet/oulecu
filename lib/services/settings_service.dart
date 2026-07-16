@@ -98,6 +98,12 @@ class SettingsService {
   int getDefaultAccentColor() => prefs.getInt(AppConstants.keyDefaultAccentColor) ?? 0xFFFFD700;
   Future<void> setDefaultAccentColor(int color) => prefs.setInt(AppConstants.keyDefaultAccentColor, color);
 
+  double getDefaultCardWidth() => prefs.getDouble(AppConstants.keyDefaultCardWidth) ?? AppConstants.defaultCardWidth;
+  Future<void> setDefaultCardWidth(double width) => prefs.setDouble(AppConstants.keyDefaultCardWidth, width);
+
+  double getDefaultCardHeight() => prefs.getDouble(AppConstants.keyDefaultCardHeight) ?? AppConstants.defaultCardHeight;
+  Future<void> setDefaultCardHeight(double height) => prefs.setDouble(AppConstants.keyDefaultCardHeight, height);
+
   // Display Settings
   bool getShowDate() => prefs.getBool(AppConstants.keyShowDate) ?? true;
   Future<void> setShowDate(bool show) => prefs.setBool(AppConstants.keyShowDate, show);

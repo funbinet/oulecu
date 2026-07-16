@@ -5,9 +5,28 @@ import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 import '../widgets/color_picker.dart';
 import '../widgets/custom_button.dart';
+import '../services/settings_service.dart';
+
 
 class DesignScreen extends StatelessWidget {
   const DesignScreen({super.key});
+
+  void _promptSaveDefaults(BuildContext context, double width, double height) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Save new dimensions as default?'),
+        action: SnackBarAction(
+          label: 'Save',
+          onPressed: () async {
+            final settings = SettingsService();
+            await settings.setDefaultCardWidth(width);
+            await settings.setDefaultCardHeight(height);
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +98,8 @@ class DesignScreen extends StatelessWidget {
                                   value: config.fontFamily,
                                   isExpanded: true,
                                   dropdownColor: AppColors.surface,
-                                  icon: const Icon(Icons.arrow_drop_down, color: AppColors.primaryGold),
-                                  style: const TextStyle(
+                                  icon: Icon(Icons.arrow_drop_down, color: AppColors.primaryGold),
+                                  style: TextStyle(
                                     color: AppColors.textPrimary,
                                     fontFamily: 'JetBrainsMono',
                                     fontSize: 14,
@@ -101,30 +120,13 @@ class DesignScreen extends StatelessWidget {
                             // Font size
                             Row(
                               children: [
-                                const Text(
-                                  'Size:',
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontFamily: 'JetBrainsMono',
-                                    fontSize: 13,
-                                  ),
-                                ),
                                 Expanded(
-                                  child: Slider(
-                                    value: config.fontSize,
-                                    min: 10,
-                                    max: 32,
-                                    divisions: 22,
-                                    label: config.fontSize.toInt().toString(),
-                                    onChanged: appState.setFontSize,
-                                  ),
-                                ),
-                                Text(
-                                  config.fontSize.toInt().toString(),
-                                  style: const TextStyle(
-                                    color: AppColors.primaryGold,
-                                    fontFamily: 'JetBrainsMono',
-                                    fontSize: 13,
+                                  child: _DimensionInput(
+                                    label: 'Font Size',
+                                    value: config.fontSize.toInt(),
+                                    onChanged: (val) {
+                                      appState.setFontSize(val.toDouble());
+                                    },
                                   ),
                                 ),
                               ],
@@ -156,7 +158,7 @@ class DesignScreen extends StatelessWidget {
                             const SizedBox(height: 12),
                             Row(
                               children: [
-                                const Text(
+                                Text(
                                   'Width:',
                                   style: TextStyle(
                                     color: AppColors.textSecondary,
@@ -176,7 +178,7 @@ class DesignScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   config.borderWidth.toStringAsFixed(1),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppColors.primaryGold,
                                     fontFamily: 'JetBrainsMono',
                                     fontSize: 13,
@@ -257,11 +259,12 @@ class DesignScreen extends StatelessWidget {
                                         value.toDouble(),
                                         config.cardHeight,
                                       );
+                                      _promptSaveDefaults(context, value.toDouble(), config.cardHeight);
                                     },
                                   ),
                                 ),
                                 const SizedBox(width: 12),
-                                const Text(
+                                Text(
                                   'x',
                                   style: TextStyle(
                                     color: AppColors.primaryGold,
@@ -279,6 +282,7 @@ class DesignScreen extends StatelessWidget {
                                         config.cardWidth,
                                         value.toDouble(),
                                       );
+                                      _promptSaveDefaults(context, config.cardWidth, value.toDouble());
                                     },
                                   ),
                                 ),
@@ -294,7 +298,7 @@ class DesignScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    border: const Border(top: BorderSide(color: AppColors.borderMuted)),
+                    border: Border(top: BorderSide(color: AppColors.borderMuted)),
                   ),
                   child: ActionButtons(
                     onBack: () => appState.goBack(),
@@ -326,6 +330,23 @@ class _CollapsibleSection extends StatefulWidget {
 class _CollapsibleSectionState extends State<_CollapsibleSection> {
   bool _isExpanded = true;
 
+  void _promptSaveDefaults(BuildContext context, double width, double height) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Save new dimensions as default?'),
+        action: SnackBarAction(
+          label: 'Save',
+          onPressed: () async {
+            final settings = SettingsService();
+            await settings.setDefaultCardWidth(width);
+            await settings.setDefaultCardHeight(height);
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -350,7 +371,7 @@ class _CollapsibleSectionState extends State<_CollapsibleSection> {
                 children: [
                   Text(
                     widget.title.toUpperCase(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.primaryGold,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -361,7 +382,7 @@ class _CollapsibleSectionState extends State<_CollapsibleSection> {
                   AnimatedRotation(
                     turns: _isExpanded ? 0.5 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(
+                    child: Icon(
                       Icons.keyboard_arrow_down,
                       color: AppColors.primaryGold,
                       size: 20,
@@ -393,6 +414,23 @@ class _ToggleItem extends StatelessWidget {
     required this.onChanged,
   });
 
+  void _promptSaveDefaults(BuildContext context, double width, double height) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Save new dimensions as default?'),
+        action: SnackBarAction(
+          label: 'Save',
+          onPressed: () async {
+            final settings = SettingsService();
+            await settings.setDefaultCardWidth(width);
+            await settings.setDefaultCardHeight(height);
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -400,7 +438,7 @@ class _ToggleItem extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 14,
             ),
@@ -426,12 +464,29 @@ class _DimensionInput extends StatelessWidget {
     required this.onChanged,
   });
 
+  void _promptSaveDefaults(BuildContext context, double width, double height) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Save new dimensions as default?'),
+        action: SnackBarAction(
+          label: 'Save',
+          onPressed: () async {
+            final settings = SettingsService();
+            await settings.setDefaultCardWidth(width);
+            await settings.setDefaultCardHeight(height);
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: value.toString(),
       keyboardType: TextInputType.number,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textPrimary,
         fontFamily: 'JetBrainsMono',
         fontSize: 14,

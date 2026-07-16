@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 : null,
                           ),
                           child: appState.cardConfig.avatarBytes == null
-                              ? const Icon(
+                              ? Icon(
                                   Icons.person,
                                   size: 48,
                                   color: AppColors.primaryGold,
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           right: 0,
                           child: Container(
                             padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               color: AppColors.primaryGold,
                               shape: BoxShape.circle,
                             ),
@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: Column(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.code,
                           size: 32,
                           color: AppColors.primaryGold,
@@ -286,12 +286,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 icon: Icons.email,
                                 text: AppConstants.creatorEmail,
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               _ContactRow(
                                 icon: Icons.code,
                                 text: 'github.com/funbinet',
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               _ContactRow(
                                 icon: Icons.code_off,
                                 text: 'codeberg.org/funbinet',
@@ -344,8 +344,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 24),
               ListTile(
-                leading: const Icon(Icons.photo_library, color: AppColors.primaryGold),
-                title: const Text('Gallery', style: TextStyle(color: AppColors.textPrimary)),
+                leading: Icon(Icons.photo_library, color: AppColors.primaryGold),
+                title: Text('Gallery', style: TextStyle(color: AppColors.textPrimary)),
                 onTap: () async {
                   Navigator.pop(context);
                   final picked = await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -358,8 +358,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const Divider(color: AppColors.divider),
               ListTile(
-                leading: const Icon(Icons.camera_alt, color: AppColors.primaryGold),
-                title: const Text('Camera', style: TextStyle(color: AppColors.textPrimary)),
+                leading: Icon(Icons.camera_alt, color: AppColors.primaryGold),
+                title: Text('Camera', style: TextStyle(color: AppColors.textPrimary)),
                 onTap: () async {
                   Navigator.pop(context);
                   final picked = await _imagePicker.pickImage(source: ImageSource.camera);
@@ -385,7 +385,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
-        title: const Text(
+        title: Text(
           'Send Feedback',
           style: TextStyle(color: AppColors.textPrimary),
         ),
@@ -393,7 +393,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'We value your feedback! Send your thoughts, bug reports, or feature requests.',
               style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
@@ -401,7 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             TextFormField(
               controller: feedbackController,
               maxLines: 4,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textPrimary,
                 fontFamily: 'JetBrainsMono',
               ),
@@ -429,17 +429,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       letterSpacing: 1.5,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   _ContactRow(
                     icon: Icons.email,
                     text: AppConstants.creatorEmail,
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   _ContactRow(
                     icon: Icons.code,
                     text: 'github.com/funbinet',
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   _ContactRow(
                     icon: Icons.code_off,
                     text: 'codeberg.org/funbinet',
@@ -491,7 +491,7 @@ class _StatItem extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -500,7 +500,7 @@ class _StatItem extends StatelessWidget {
         ),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textMuted,
             fontSize: 12,
           ),
@@ -527,9 +527,9 @@ class _ActionTile extends StatelessWidget {
       leading: Icon(icon, color: AppColors.primaryGold, size: 22),
       title: Text(
         label,
-        style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+        style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
       ),
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted, size: 18),
+      trailing: Icon(Icons.chevron_right, color: AppColors.textMuted, size: 18),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
       minLeadingWidth: 36,
@@ -566,7 +566,7 @@ class _SocialButton extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 12,
                 fontFamily: 'JetBrainsMono',
@@ -597,7 +597,7 @@ class _ContactRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 12,
               fontFamily: 'JetBrainsMono',

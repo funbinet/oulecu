@@ -46,7 +46,7 @@ class GoldColorPicker extends StatelessWidget {
                 children: [
                   Text(
                     label.toUpperCase(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 10,
                       fontFamily: 'JetBrainsMono',
@@ -55,7 +55,7 @@ class GoldColorPicker extends StatelessWidget {
                   ),
                   Text(
                     '#${_colorToHex(color)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 13,
                       fontFamily: 'JetBrainsMono',
@@ -64,7 +64,7 @@ class GoldColorPicker extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.colorize,
               size: 18,
               color: AppColors.textMuted,
@@ -84,7 +84,7 @@ class GoldColorPicker extends StatelessWidget {
         backgroundColor: AppColors.surface,
         title: Text(
           'Pick $label',
-          style: const TextStyle(color: AppColors.textPrimary),
+          style: TextStyle(color: AppColors.textPrimary),
         ),
         content: SingleChildScrollView(
           child: ColorPicker(

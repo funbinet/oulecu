@@ -1,7 +1,7 @@
 name: oulecu
 description: OULECU - Offline Image Card Generator with extensive customization
 publish_to: 'none'
-version: 1.0.0+1
+version: 2.5.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -19,7 +19,7 @@ dependencies:
 
   flutter_svg: ^2.0.9
   vector_math: ^2.1.4
-  intl: ^0.18.1
+  intl: ^0.20.2
   google_fonts: ^6.1.0
   flutter_launcher_icons: ^0.13.1
   share_plus: ^7.2.1
@@ -28,7 +28,9 @@ dependencies:
   provider: ^6.1.1
   path: ^1.8.3
   cupertino_icons: ^1.0.6
+  flutter_quill: ^11.5.1
   url_launcher: ^6.3.2
+  archive: ^4.0.9
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +39,28 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
+    - family: FiraCode
+      fonts:
+        - asset: assets/fonts/FiraCode.ttf
+    - family: SourceCodePro
+      fonts:
+        - asset: assets/fonts/SourceCodePro.ttf
+    - family: Hack
+      fonts:
+        - asset: assets/fonts/Hack.ttf
+    - family: UbuntuMono
+      fonts:
+        - asset: assets/fonts/UbuntuMono.ttf
+    - family: Courier New
+      fonts:
+        - asset: assets/fonts/CourierNew.ttf
+    - family: Inconsolata
+      fonts:
+        - asset: assets/fonts/Inconsolata.ttf
   assets:
     - assets/images/
     - assets/icons/

@@ -82,7 +82,7 @@ class _HashtagScreenState extends State<HashtagScreen> {
                             children: [
                               Row(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.link,
                                     size: 18,
                                     color: AppColors.primaryGold,
@@ -182,7 +182,7 @@ class _HashtagScreenState extends State<HashtagScreen> {
                               const SizedBox(height: 12),
                               Row(
                                 children: [
-                                  const Text(
+                                  Text(
                                     '#',
                                     style: TextStyle(
                                       color: AppColors.primaryGold,
@@ -226,7 +226,7 @@ class _HashtagScreenState extends State<HashtagScreen> {
                                       });
                                     },
                                   ),
-                                  const Text(
+                                  Text(
                                     'Save to available tags',
                                     style: TextStyle(
                                       color: AppColors.textSecondary,
@@ -247,7 +247,7 @@ class _HashtagScreenState extends State<HashtagScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    border: const Border(
+                    border: Border(
                       top: BorderSide(color: AppColors.borderMuted),
                     ),
                   ),
@@ -294,7 +294,7 @@ class _SelectedTagChip extends StatelessWidget {
         children: [
           Text(
             '#$tag',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.primaryGold,
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -304,7 +304,7 @@ class _SelectedTagChip extends StatelessWidget {
           const SizedBox(width: 6),
           GestureDetector(
             onTap: onRemove,
-            child: const Icon(
+            child: Icon(
               Icons.close,
               size: 16,
               color: AppColors.primaryGold,

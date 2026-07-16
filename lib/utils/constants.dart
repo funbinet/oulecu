@@ -5,7 +5,7 @@ class AppConstants {
 
   // App Info
   static const String appName = 'OULECU';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = 'v2.5.0';
   static const String creatorName = 'OULEC';
   static const String creatorEmail = 'funbinet@gmail.com';
   static const String githubUrl = 'https://github.com/funbinet';
