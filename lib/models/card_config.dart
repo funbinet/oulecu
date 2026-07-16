@@ -7,7 +7,6 @@ class CardConfig {
   String topic;
   String subtopic;
   String content;
-  String? quillDeltaJson;
   String? contentImagePath;
   Uint8List? contentImageBytes;
   List<String> hashtags;
@@ -66,13 +65,12 @@ class CardConfig {
     this.topic = '',
     this.subtopic = '',
     this.content = '',
-    this.quillDeltaJson,
     this.contentImagePath,
     this.contentImageBytes,
     this.hashtags = const [],
     this.link,
-    this.name = 'OULEC Creator',
-    this.handle = '@oulegu',
+    this.name = 'Oulec',
+    this.handle = '@oulec',
     this.avatarPath,
     this.avatarBytes,
     this.showDate = true,
@@ -110,7 +108,6 @@ class CardConfig {
     String? topic,
     String? subtopic,
     String? content,
-    String? quillDeltaJson,
     String? contentImagePath,
     Uint8List? contentImageBytes,
     List<String>? hashtags,
@@ -153,7 +150,6 @@ class CardConfig {
       topic: topic ?? this.topic,
       subtopic: subtopic ?? this.subtopic,
       content: content ?? this.content,
-      quillDeltaJson: quillDeltaJson ?? this.quillDeltaJson,
       contentImagePath: contentImagePath ?? this.contentImagePath,
       contentImageBytes: contentImageBytes ?? this.contentImageBytes,
       hashtags: hashtags ?? this.hashtags,
@@ -199,7 +195,6 @@ class CardConfig {
       'topic': topic,
       'subtopic': subtopic,
       'content': content,
-      'quillDeltaJson': quillDeltaJson,
       'contentImagePath': contentImagePath,
       'hashtags': hashtags,
       'link': link,
@@ -243,12 +238,11 @@ class CardConfig {
       topic: json['topic'] ?? '',
       subtopic: json['subtopic'] ?? '',
       content: json['content'] ?? '',
-      quillDeltaJson: json['quillDeltaJson'],
       contentImagePath: json['contentImagePath'],
       hashtags: List<String>.from(json['hashtags'] ?? []),
       link: json['link'],
-      name: json['name'] ?? 'OULEC Creator',
-      handle: json['handle'] ?? '@oulegu',
+      name: json['name'] ?? 'Oulec',
+      handle: json['handle'] ?? '@oulec',
       avatarPath: json['avatarPath'],
       showDate: json['showDate'] ?? true,
       showTime: json['showTime'] ?? true,

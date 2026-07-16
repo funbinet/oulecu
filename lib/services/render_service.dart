@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import '../models/card_config.dart';
 import '../models/template.dart';
-import '../utils/delta_to_textspan.dart';
+import '../utils/markdown_parser.dart';
 import '../utils/shape_utils.dart';
 
 import 'storage_service.dart';
@@ -171,7 +171,7 @@ class RenderService {
 
     // 4. Content text
     TextPainter? contentPainter;
-    if (config.quillDeltaJson?.isNotEmpty == true || config.content.isNotEmpty) {
+    if (config.content.isNotEmpty) {
       final baseStyle = TextStyle(
         color: template.textColor,
         fontSize: config.fontSize,
@@ -181,12 +181,7 @@ class RenderService {
         height: 1.5,
       );
 
-      TextSpan textSpan;
-      if (config.quillDeltaJson != null && config.quillDeltaJson!.isNotEmpty) {
-        textSpan = convertDeltaToTextSpan(config.quillDeltaJson!, baseStyle);
-      } else {
-        textSpan = TextSpan(text: config.content, style: baseStyle);
-      }
+      TextSpan textSpan = MarkdownParser.parse(config.content, baseStyle);
 
       contentPainter = TextPainter(
         text: textSpan,
@@ -344,12 +339,7 @@ class RenderService {
         height: 1.5,
       );
 
-      TextSpan textSpan;
-      if (config.quillDeltaJson != null && config.quillDeltaJson!.isNotEmpty) {
-        textSpan = convertDeltaToTextSpan(config.quillDeltaJson!, baseStyle);
-      } else {
-        textSpan = TextSpan(text: config.content, style: baseStyle);
-      }
+      TextSpan textSpan = MarkdownParser.parse(config.content, baseStyle);
 
       final cp = TextPainter(
         text: textSpan,

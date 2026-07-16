@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/app_state_provider.dart';
 import '../theme/app_theme.dart';
 import '../utils/shape_utils.dart';
+import '../utils/markdown_parser.dart';
 
 import '../widgets/custom_button.dart';
 
@@ -301,16 +302,21 @@ class _CardPreviewWidget extends StatelessWidget {
           if (config.contentImageBytes != null) const SizedBox(height: 12),
           // Content
           Expanded(
-            child: Text(
-              config.content,
-              style: TextStyle(
-                color: config.textColor.withOpacity(0.9),
-                fontSize: 13,
-                fontFamily: config.fontFamily,
-                height: 1.5,
+            child: Text.rich(
+              MarkdownParser.parse(
+                config.content,
+                TextStyle(
+                  color: config.textColor.withOpacity(0.9),
+                  fontSize: 13,
+                  fontFamily: config.fontFamily,
+                  height: 1.5,
+                  fontWeight: config.fontWeight,
+                  fontStyle: config.fontStyle,
+                ),
               ),
               maxLines: 6,
               overflow: TextOverflow.ellipsis,
+              textAlign: config.textAlign,
             ),
           ),
           // Hashtags

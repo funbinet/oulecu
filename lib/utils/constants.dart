@@ -46,8 +46,8 @@ class AppConstants {
 
   // Defaults
   static const String defaultAppName = 'OULECU';
-  static const String defaultUserName = 'OULEC Creator';
-  static const String defaultUserHandle = '@oulegu';
+  static const String defaultUserName = 'Oulec';
+  static const String defaultUserHandle = '@oulec';
   static const String defaultFont = 'JetBrainsMono';
   static const double defaultFontSize = 16.0;
   static const String defaultFormat = 'PNG';

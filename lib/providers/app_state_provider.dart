@@ -258,11 +258,6 @@ class AppStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setQuillDeltaJson(String json) {
-    _cardConfig = _cardConfig.copyWith(quillDeltaJson: json);
-    notifyListeners();
-  }
-
   void setContentImage(String? imagePath, Uint8List? bytes) {
     _cardConfig.contentImagePath = imagePath;
     _cardConfig.contentImageBytes = bytes;
