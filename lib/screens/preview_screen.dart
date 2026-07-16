@@ -178,7 +178,7 @@ class _CardPreviewWidget extends StatelessWidget {
         ],
       ),
       child: AspectRatio(
-        aspectRatio: 1,
+        aspectRatio: config.cardWidth / config.cardHeight,
         child: Container(
           decoration: BoxDecoration(
             gradient: template.gradientEndColor != null
@@ -190,20 +190,27 @@ class _CardPreviewWidget extends StatelessWidget {
                 : null,
             color: template.gradientEndColor == null ? template.backgroundColor : null,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: config.accentColor.withOpacity(0.3)),
+            border: Border.all(color: template.accentColor.withOpacity(0.5), width: config.borderWidth > 0 ? config.borderWidth : 2.0),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: _buildCardContent(config),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: SizedBox(
+                width: config.cardWidth,
+                height: config.cardHeight,
+                child: _buildCardContent(config, template),
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCardContent(dynamic config) {
+  Widget _buildCardContent(dynamic config, dynamic template) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(32), // Scales nicely with larger width/height
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -211,12 +218,12 @@ class _CardPreviewWidget extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: config.accentColor.withOpacity(0.2),
-                  border: Border.all(color: config.accentColor, width: 1.5),
+                  color: template.accentColor.withOpacity(0.2),
+                  border: Border.all(color: template.accentColor, width: 1.5),
                   image: config.avatarBytes != null
                       ? DecorationImage(
                           image: MemoryImage(config.avatarBytes as Uint8List),
@@ -225,7 +232,7 @@ class _CardPreviewWidget extends StatelessWidget {
                       : null,
                 ),
                 child: config.avatarBytes == null
-                    ? Icon(Icons.person, size: 20, color: config.accentColor)
+                    ? Icon(Icons.person, size: 24, color: template.accentColor)
                     : null,
               ),
               const SizedBox(width: 10),
@@ -256,8 +263,8 @@ class _CardPreviewWidget extends StatelessWidget {
               Text(
                 'OULECU',
                 style: TextStyle(
-                  color: config.accentColor.withOpacity(0.5),
-                  fontSize: 10,
+                  color: template.accentColor.withOpacity(0.5),
+                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'JetBrainsMono',
                   letterSpacing: 1.5,
@@ -265,14 +272,14 @@ class _CardPreviewWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           // Topic
           if (config.topic.isNotEmpty)
             Text(
               config.topic.toUpperCase(),
               style: TextStyle(
-                color: config.accentColor,
-                fontSize: 18,
+                color: template.accentColor,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 fontFamily: config.fontFamily,
                 letterSpacing: 2,
@@ -291,23 +298,23 @@ class _CardPreviewWidget extends StatelessWidget {
           // Content image
           if (config.contentImageBytes != null)
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(12),
               child: Image.memory(
                 config.contentImageBytes as Uint8List,
-                height: 120,
+                height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
-          if (config.contentImageBytes != null) const SizedBox(height: 12),
+          if (config.contentImageBytes != null) const SizedBox(height: 16),
           // Content
           Expanded(
             child: Text.rich(
               MarkdownParser.parse(
                 config.content,
                 TextStyle(
-                  color: config.textColor.withOpacity(0.9),
-                  fontSize: 13,
+                  color: template.textColor.withOpacity(0.9),
+                  fontSize: config.fontSize,
                   fontFamily: config.fontFamily,
                   height: 1.5,
                   fontWeight: config.fontWeight,
@@ -322,23 +329,23 @@ class _CardPreviewWidget extends StatelessWidget {
           // Hashtags
           if (config.hashtags.isNotEmpty)
             Wrap(
-              spacing: 6,
+              spacing: 8,
               children: config.hashtags.map((tag) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: config.accentColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(12),
+                    color: template.accentColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: config.accentColor.withOpacity(0.3),
-                      width: 0.5,
+                      color: template.accentColor.withOpacity(0.3),
+                      width: 1.0,
                     ),
                   ),
                   child: Text(
                     '#$tag',
                     style: TextStyle(
-                      color: config.accentColor,
-                      fontSize: 10,
+                      color: template.accentColor,
+                      fontSize: 12,
                       fontFamily: config.fontFamily,
                     ),
                   ),
@@ -355,8 +362,8 @@ class _CardPreviewWidget extends StatelessWidget {
                   child: Text(
                     config.link.toString().replaceAll(RegExp(r'^https?://'), ''),
                     style: TextStyle(
-                      color: config.accentColor.withOpacity(0.6),
-                      fontSize: 10,
+                      color: template.accentColor.withOpacity(0.6),
+                      fontSize: 14,
                       fontFamily: config.fontFamily,
                       decoration: TextDecoration.underline,
                     ),
@@ -370,8 +377,8 @@ class _CardPreviewWidget extends StatelessWidget {
                     Text(
                       '13/07/2025',
                       style: TextStyle(
-                        color: config.textColor.withOpacity(0.4),
-                        fontSize: 10,
+                        color: template.textColor.withOpacity(0.4),
+                        fontSize: 14,
                         fontFamily: config.fontFamily,
                       ),
                     ),
@@ -379,16 +386,16 @@ class _CardPreviewWidget extends StatelessWidget {
                     Text(
                       '  |  ',
                       style: TextStyle(
-                        color: config.textColor.withOpacity(0.2),
-                        fontSize: 10,
+                        color: template.textColor.withOpacity(0.2),
+                        fontSize: 14,
                       ),
                     ),
                   if (config.showTime)
                     Text(
                       '12:00',
                       style: TextStyle(
-                        color: config.textColor.withOpacity(0.4),
-                        fontSize: 10,
+                        color: template.textColor.withOpacity(0.4),
+                        fontSize: 14,
                         fontFamily: config.fontFamily,
                       ),
                     ),

@@ -98,6 +98,20 @@ class SettingsService {
   int getDefaultAccentColor() => prefs.getInt(AppConstants.keyDefaultAccentColor) ?? 0xFFFFD700;
   Future<void> setDefaultAccentColor(int color) => prefs.setInt(AppConstants.keyDefaultAccentColor, color);
 
+  int getAppThemePrimary() => prefs.getInt(AppConstants.keyAppThemePrimary) ?? 0xFFFFD700;
+  Future<void> setAppThemePrimary(int color) => prefs.setInt(AppConstants.keyAppThemePrimary, color);
+
+  int? getAppThemeSecondary() {
+    final val = prefs.getInt(AppConstants.keyAppThemeSecondary);
+    return (val == null || val == 0) ? null : val;
+  }
+  Future<void> setAppThemeSecondary(int? color) {
+    if (color == null) {
+      return prefs.remove(AppConstants.keyAppThemeSecondary);
+    }
+    return prefs.setInt(AppConstants.keyAppThemeSecondary, color);
+  }
+
   double getDefaultCardWidth() => prefs.getDouble(AppConstants.keyDefaultCardWidth) ?? AppConstants.defaultCardWidth;
   Future<void> setDefaultCardWidth(double width) => prefs.setDouble(AppConstants.keyDefaultCardWidth, width);
 

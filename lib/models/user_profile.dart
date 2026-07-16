@@ -12,7 +12,7 @@ class UserProfile {
 
   UserProfile({
     this.name = 'Oulec',
-    this.handle = '@oulec',
+    this.handle = 'oulec',
     this.avatarPath,
     this.avatarBytes,
     this.cardsGenerated = 0,
@@ -58,7 +58,7 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       name: json['name'] ?? 'Oulec',
-      handle: json['handle'] ?? '@oulec',
+      handle: json['handle'] ?? 'oulec',
       avatarPath: json['avatarPath'],
       cardsGenerated: json['cardsGenerated'] ?? 0,
       tagsUsed: json['tagsUsed'] ?? 0,

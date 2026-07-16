@@ -131,6 +131,8 @@ class AppStateProvider extends ChangeNotifier {
       logoPlacement: _settings.getLogoPlacement(),
       exportFormats: [_settings.getDefaultFormat()],
       quality: _settings.getExportQuality(),
+      cardWidth: _settings.getDefaultCardWidth(),
+      cardHeight: _settings.getDefaultCardHeight(),
     );
     notifyListeners();
   }

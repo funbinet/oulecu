@@ -11,22 +11,7 @@ import '../services/settings_service.dart';
 class DesignScreen extends StatelessWidget {
   const DesignScreen({super.key});
 
-  void _promptSaveDefaults(BuildContext context, double width, double height) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Save new dimensions as default?'),
-        action: SnackBarAction(
-          label: 'Save',
-          onPressed: () async {
-            final settings = SettingsService();
-            await settings.setDefaultCardWidth(width);
-            await settings.setDefaultCardHeight(height);
-          },
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +106,7 @@ class DesignScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Expanded(
-                                  child: _DimensionInput(
+                                  child: _NumberInput(
                                     label: 'Font Size',
                                     value: config.fontSize.toInt(),
                                     onChanged: (val) {
@@ -246,49 +231,17 @@ class DesignScreen extends StatelessWidget {
                       // Dimensions
                       _CollapsibleSection(
                         title: 'Dimensions',
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _DimensionInput(
-                                    label: 'Width',
-                                    value: config.cardWidth.toInt(),
-                                    onChanged: (value) {
-                                      appState.setCardDimensions(
-                                        value.toDouble(),
-                                        config.cardHeight,
-                                      );
-                                      _promptSaveDefaults(context, value.toDouble(), config.cardHeight);
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  'x',
-                                  style: TextStyle(
-                                    color: AppColors.primaryGold,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _DimensionInput(
-                                    label: 'Height',
-                                    value: config.cardHeight.toInt(),
-                                    onChanged: (value) {
-                                      appState.setCardDimensions(
-                                        config.cardWidth,
-                                        value.toDouble(),
-                                      );
-                                      _promptSaveDefaults(context, config.cardWidth, value.toDouble());
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        child: _DimensionsDisplay(
+                          width: config.cardWidth,
+                          height: config.cardHeight,
+                          onSave: (w, h, saveDefault) async {
+                            appState.setCardDimensions(w, h);
+                            if (saveDefault) {
+                              final settings = SettingsService();
+                              await settings.setDefaultCardWidth(w);
+                              await settings.setDefaultCardHeight(h);
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -330,22 +283,7 @@ class _CollapsibleSection extends StatefulWidget {
 class _CollapsibleSectionState extends State<_CollapsibleSection> {
   bool _isExpanded = true;
 
-  void _promptSaveDefaults(BuildContext context, double width, double height) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Save new dimensions as default?'),
-        action: SnackBarAction(
-          label: 'Save',
-          onPressed: () async {
-            final settings = SettingsService();
-            await settings.setDefaultCardWidth(width);
-            await settings.setDefaultCardHeight(height);
-          },
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -414,22 +352,7 @@ class _ToggleItem extends StatelessWidget {
     required this.onChanged,
   });
 
-  void _promptSaveDefaults(BuildContext context, double width, double height) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Save new dimensions as default?'),
-        action: SnackBarAction(
-          label: 'Save',
-          onPressed: () async {
-            final settings = SettingsService();
-            await settings.setDefaultCardWidth(width);
-            await settings.setDefaultCardHeight(height);
-          },
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -453,33 +376,128 @@ class _ToggleItem extends StatelessWidget {
   }
 }
 
-class _DimensionInput extends StatelessWidget {
+class _DimensionsDisplay extends StatelessWidget {
+  final double width;
+  final double height;
+  final Function(double w, double h, bool saveDefault) onSave;
+
+  const _DimensionsDisplay({
+    required this.width,
+    required this.height,
+    required this.onSave,
+  });
+
+  void _showEditDialog(BuildContext context) {
+    double tempW = width;
+    double tempH = height;
+    bool saveDefault = false;
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Edit Dimensions', style: TextStyle(color: AppColors.primaryGold)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: tempW.toInt().toString(),
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(labelText: 'Width'),
+                          onChanged: (val) {
+                            final parsed = double.tryParse(val);
+                            if (parsed != null && parsed > 0) tempW = parsed;
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Text('x', style: TextStyle(color: AppColors.primaryGold, fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: tempH.toInt().toString(),
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(labelText: 'Height'),
+                          onChanged: (val) {
+                            final parsed = double.tryParse(val);
+                            if (parsed != null && parsed > 0) tempH = parsed;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: saveDefault,
+                        onChanged: (val) {
+                          setState(() => saveDefault = val ?? false);
+                        },
+                      ),
+                      const Text('Set as default dimensions'),
+                    ],
+                  )
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    onSave(tempW, tempH, saveDefault);
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '${width.toInt()} x ${height.toInt()}',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'JetBrainsMono',
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.edit, color: AppColors.primaryGold),
+          onPressed: () => _showEditDialog(context),
+        ),
+      ],
+    );
+  }
+}
+
+class _NumberInput extends StatelessWidget {
   final String label;
   final int value;
   final ValueChanged<int> onChanged;
 
-  const _DimensionInput({
+  const _NumberInput({
     required this.label,
     required this.value,
     required this.onChanged,
   });
-
-  void _promptSaveDefaults(BuildContext context, double width, double height) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Save new dimensions as default?'),
-        action: SnackBarAction(
-          label: 'Save',
-          onPressed: () async {
-            final settings = SettingsService();
-            await settings.setDefaultCardWidth(width);
-            await settings.setDefaultCardHeight(height);
-          },
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

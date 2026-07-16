@@ -64,17 +64,66 @@ class AppColors {
   );
 
   
-  static void setAccentColor(Color color) {
-    primaryGold = color;
-    // Auto-calculate derivative colors based on HSL or just opacity
-    final hsl = HSLColor.fromColor(color);
-    secondaryGold = hsl.withLightness((hsl.lightness - 0.15).clamp(0.0, 1.0)).toColor();
-    goldLight = hsl.withLightness((hsl.lightness + 0.15).clamp(0.0, 1.0)).toColor();
-    goldDark = hsl.withLightness((hsl.lightness - 0.25).clamp(0.0, 1.0)).toColor();
-    goldGlow = color.withValues(alpha: 0.2);
-    textGold = color;
-    border = color;
-    borderMuted = color.withValues(alpha: 0.2);
+  static final List<Color> presetColors = [
+    const Color(0xFFFFD700), // Gold
+    const Color(0xFF6200EE), // Purple
+    const Color(0xFF03DAC6), // Teal
+    const Color(0xFFF44336), // Red
+    const Color(0xFFE91E63), // Pink
+    const Color(0xFF9C27B0), // Deep Purple
+    const Color(0xFF673AB7), // Indigo
+    const Color(0xFF3F51B5), // Blue
+    const Color(0xFF2196F3), // Light Blue
+    const Color(0xFF00BCD4), // Cyan
+    const Color(0xFF009688), // Teal Dark
+    const Color(0xFF4CAF50), // Green
+    const Color(0xFF8BC34A), // Light Green
+    const Color(0xFFCDDC39), // Lime
+    const Color(0xFFFFEB3B), // Yellow
+    const Color(0xFFFFC107), // Amber
+    const Color(0xFFFF9800), // Orange
+    const Color(0xFFFF5722), // Deep Orange
+    const Color(0xFF795548), // Brown
+    const Color(0xFF9E9E9E), // Grey
+    const Color(0xFF607D8B), // Blue Grey
+  ];
+
+  static final List<List<Color>> presetGradients = [
+    [const Color(0xFFFFD700), const Color(0xFFF39C12)], // Gold to Orange
+    [const Color(0xFF6200EE), const Color(0xFFB00020)], // Purple to Red
+    [const Color(0xFF2196F3), const Color(0xFF00BCD4)], // Blue to Cyan
+    [const Color(0xFF4CAF50), const Color(0xFF8BC34A)], // Green to Light Green
+    [const Color(0xFFE91E63), const Color(0xFFFF9800)], // Pink to Orange
+    [const Color(0xFF9C27B0), const Color(0xFF3F51B5)], // Deep Purple to Indigo
+    [const Color(0xFF009688), const Color(0xFF4CAF50)], // Teal to Green
+    [const Color(0xFFFF5722), const Color(0xFFF44336)], // Deep Orange to Red
+    [const Color(0xFF3F51B5), const Color(0xFF2196F3)], // Indigo to Blue
+    [const Color(0xFFCDDC39), const Color(0xFFFFEB3B)], // Lime to Yellow
+    [const Color(0xFFFFC107), const Color(0xFFFF9800)], // Amber to Orange
+    [const Color(0xFF795548), const Color(0xFFFF5722)], // Brown to Deep Orange
+    [const Color(0xFF607D8B), const Color(0xFF9E9E9E)], // Blue Grey to Grey
+    [const Color(0xFF000000), const Color(0xFF434343)], // Black to Dark Grey
+    [const Color(0xFFFFFFFF), const Color(0xFFE0E0E0)], // White to Light Grey
+  ];
+
+  static void setAccentColor(Color primary, [Color? secondary]) {
+    primaryGold = primary;
+    if (secondary != null) {
+      secondaryGold = secondary;
+      goldLight = secondary.withOpacity(0.8);
+      goldDark = primary.withOpacity(0.8);
+    } else {
+      // Auto-calculate derivative colors based on HSL
+      final hsl = HSLColor.fromColor(primary);
+      secondaryGold = hsl.withLightness((hsl.lightness - 0.15).clamp(0.0, 1.0)).toColor();
+      goldLight = hsl.withLightness((hsl.lightness + 0.15).clamp(0.0, 1.0)).toColor();
+      goldDark = hsl.withLightness((hsl.lightness - 0.25).clamp(0.0, 1.0)).toColor();
+    }
+    
+    goldGlow = primary.withValues(alpha: 0.2);
+    textGold = primary;
+    border = primary;
+    borderMuted = primary.withValues(alpha: 0.2);
     
     goldGradient = LinearGradient(
       colors: [primaryGold, secondaryGold],

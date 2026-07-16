@@ -122,6 +122,90 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     );
                   },
                 ),
+                const SizedBox(height: 24),
+                // Global Theme Accent Color
+                Text(
+                  'Global Theme Accent',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Solid Colors',
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 48,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: AppColors.presetColors.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      final color = AppColors.presetColors[index];
+                      final isSelected = _settings.getAppThemePrimary() == color.value && _settings.getAppThemeSecondary() == null;
+                      return GestureDetector(
+                        onTap: () {
+                          context.read<ThemeProvider>().setAppThemeColor(color);
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: color,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected ? Colors.white : Colors.transparent,
+                              width: 3,
+                            ),
+                          ),
+                          child: isSelected ? const Icon(Icons.check, color: Colors.white) : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Gradients',
+                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 48,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: AppColors.presetGradients.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      final colors = AppColors.presetGradients[index];
+                      final isSelected = _settings.getAppThemePrimary() == colors[0].value && _settings.getAppThemeSecondary() == colors[1].value;
+                      return GestureDetector(
+                        onTap: () {
+                          context.read<ThemeProvider>().setAppThemeColor(colors[0], colors[1]);
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: colors, begin: Alignment.topLeft, end: Alignment.bottomRight),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected ? Colors.white : Colors.transparent,
+                              width: 3,
+                            ),
+                          ),
+                          child: isSelected ? const Icon(Icons.check, color: Colors.white) : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
 

@@ -5,7 +5,7 @@ class AppConstants {
 
   // App Info
   static const String appName = 'OULECU';
-  static const String appVersion = 'v2.5.0';
+  static const String appVersion = 'v2.7.0';
   static const String creatorName = 'OULEC';
   static const String creatorEmail = 'funbinet@gmail.com';
   static const String githubUrl = 'https://github.com/funbinet';
@@ -34,6 +34,8 @@ class AppConstants {
   static const String keyDefaultCornerStyle = 'default_corner_style';
   static const String keyDefaultCardWidth = 'default_card_width';
   static const String keyDefaultCardHeight = 'default_card_height';
+  static const String keyAppThemePrimary = 'app_theme_primary';
+  static const String keyAppThemeSecondary = 'app_theme_secondary';
   static const String keyShowDate = 'show_date';
   static const String keyShowTime = 'show_time';
   static const String keyShowLocation = 'show_location';

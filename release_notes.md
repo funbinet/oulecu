@@ -1,14 +1,10 @@
-# OULECU Version 2.5 Release
+# OULECU v2.7.0 Release
 
-This update brings significant new features and quality of life improvements to content generation and app configurations.
+## What's New
+- **Global Themes**: Completely customize the app UI using 20 curated solid colors and 15 dynamic gradients! Switch themes easily in Settings under App Customization.
+- **Dimensions Overhaul**: Improved the card dimensions editing UI. Replaced intrusive popups with a slick pencil icon dialog that includes an option to save preferences globally.
+- **Dynamic Template Borders**: Content bounding boxes will now seamlessly inherit your selected Template's core accent color to match its aesthetic.
+- **Preview Stability Fixes**: Fixed a layout crash bug that caused a blank screen when previewing specific images and templates. You can now reliably swipe through multiple template previews.
 
-## Features & Improvements
-- **Rich Text Content Editing**: Integrated flutter_quill for advanced text editing. Content can now have bolding, italicization, coloring, and lists directly in the app.
-- **Dynamic Configuration & Shapes**: Improved visual preview and design components for rounded, beveled, and customized canvas shapes with dynamic properties.
-- **Card Default Values**: Dimensions and font sizes can now be customized globally via the Settings Screen, and auto-persist when changed from the Design screen.
-- **ZIP Export**: Added the ability to package all generated templates into a single zip file with size confirmation right from the Profile Screen.
-- **Theme Propagation**: AppColors system was entirely refactored so that customized aesthetic themes propagate instantly across the app without graphical errors.
-
-## Bug Fixes
-- Addressed bugs preventing smooth navigation utilizing the "Next" buttons with combined text/image setups.
-- Resolved flow issues on the "Create Another" button in the generation screen, which now fully resets application workflow state.
+## Downloads
+- **oulecu-v2.7.0-arm64.apk**: Production ready Android APK (arm64 architecture).

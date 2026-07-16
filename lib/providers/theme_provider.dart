@@ -27,6 +27,14 @@ class ThemeProvider extends ChangeNotifier {
     }
     _isAmoled = _settings.getAmoledTheme();
     AppColors.isAmoled = _isAmoled;
+    
+    final primary = _settings.getAppThemePrimary();
+    final secondary = _settings.getAppThemeSecondary();
+    AppColors.setAccentColor(
+      Color(primary), 
+      secondary != null ? Color(secondary) : null,
+    );
+    
     _updateSystemUI();
     notifyListeners();
   }
@@ -49,6 +57,14 @@ class ThemeProvider extends ChangeNotifier {
     _isAmoled = value;
     AppColors.isAmoled = value;
     await _settings.setAmoledTheme(value);
+    _updateSystemUI();
+    notifyListeners();
+  }
+
+  Future<void> setAppThemeColor(Color primary, [Color? secondary]) async {
+    AppColors.setAccentColor(primary, secondary);
+    await _settings.setAppThemePrimary(primary.value);
+    await _settings.setAppThemeSecondary(secondary?.value);
     _updateSystemUI();
     notifyListeners();
   }

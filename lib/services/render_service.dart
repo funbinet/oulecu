@@ -272,7 +272,7 @@ class RenderService {
 
     // Box border
     final borderPaint = Paint()
-      ..color = config.borderColor
+      ..color = template.accentColor.withOpacity(0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = config.borderWidth > 0 ? config.borderWidth : 2.0;
     canvas.drawPath(boxPath, borderPaint);
