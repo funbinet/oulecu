@@ -8,8 +8,8 @@ class AppConstants {
   static const String appVersion = 'v2.7.0';
   static const String creatorName = 'OULEC';
   static const String creatorEmail = 'funbinet@gmail.com';
-  static const String githubUrl = 'https://github.com/funbinet';
-  static const String codebergUrl = 'https://codeberg.org/funbinet';
+  static const String githubUrl = 'https://github.com/funbinet/oulecu';
+  static const String codebergUrl = 'https://codeberg.org/funbinet/oulecu';
 
   // Storage Keys
   static const String keyThemeMode = 'theme_mode';
@@ -49,7 +49,7 @@ class AppConstants {
   // Defaults
   static const String defaultAppName = 'OULECU';
   static const String defaultUserName = 'Oulec';
-  static const String defaultUserHandle = '@oulec';
+  static const String defaultUserHandle = 'oulec';
   static const String defaultFont = 'JetBrainsMono';
   static const double defaultFontSize = 16.0;
   static const String defaultFormat = 'PNG';
@@ -98,8 +98,9 @@ class AppConstants {
 
   // Corner Styles
   static const List<String> cornerStyles = [
-    'None', 'Rounded', 'Beveled', 'Scalloped',
-    'Inverted', 'Zigzag', 'Hexagon', 'Star', 'Wave',
+    'None', 'Rounded', 'Beveled', 'Ticket', 'Cutout',
+    'Notched', 'Scalloped', 'Inverted', 'Zigzag', 'Hexagon',
+    'Octagon', 'Leaf', 'Torn', 'Folded', 'Wave',
   ];
 
   // Logo Placements

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+VERSION="v2.8.0"
+TITLE="Version 2.8.0"
 APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
 
 # Wait for APK to exist if it doesn't already
@@ -20,7 +22,7 @@ GH_RESPONSE=$(curl -s -L \
   -H "Authorization: Bearer $GH_TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   https://api.github.com/repos/funbinet/oulecu/releases \
-  -d "{\"tag_name\":\"v2.7.0\",\"name\":\"Version 2.7.0\",\"body\":$(jq -Rs . < release_notes.md),\"draft\":false,\"prerelease\":false}")
+  -d "{\"tag_name\":\"$VERSION\",\"name\":\"$TITLE\",\"body\":$(jq -Rs . < release_notes.md),\"draft\":false,\"prerelease\":false}")
 
 UPLOAD_URL=$(echo $GH_RESPONSE | jq -r '.upload_url' | sed -e "s/{?name,label}//")
 
@@ -33,7 +35,7 @@ if [ "$UPLOAD_URL" != "null" ] && [ -n "$UPLOAD_URL" ]; then
     -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Content-Type: application/vnd.android.package-archive" \
     --data-binary @"$APK_PATH" \
-    "$UPLOAD_URL?name=oulecu-v2.7.0-arm64.apk" > /dev/null
+    "$UPLOAD_URL?name=oulecu-$VERSION-arm64.apk" > /dev/null
   echo "GitHub Release created and APK uploaded."
 else
   echo "Failed to create GitHub release. Response: $GH_RESPONSE"
@@ -45,7 +47,7 @@ CB_RESPONSE=$(curl -s -X POST "https://codeberg.org/api/v1/repos/funbinet/oulecu
   -H "accept: application/json" \
   -H "Authorization: token $CB_TOKEN" \
   -H "Content-Type: application/json" \
-  -d "{\"tag_name\":\"v2.7.0\",\"name\":\"Version 2.7.0\",\"body\":$(jq -Rs . < release_notes.md),\"draft\":false,\"prerelease\":false}")
+  -d "{\"tag_name\":\"$VERSION\",\"name\":\"$TITLE\",\"body\":$(jq -Rs . < release_notes.md),\"draft\":false,\"prerelease\":false}")
 
 RELEASE_ID=$(echo $CB_RESPONSE | jq -r '.id')
 
@@ -59,4 +61,3 @@ if [ "$RELEASE_ID" != "null" ] && [ -n "$RELEASE_ID" ]; then
 else
   echo "Failed to create Codeberg release. Response: $CB_RESPONSE"
 fi
-

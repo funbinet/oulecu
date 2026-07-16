@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import '../models/card_config.dart';
 import '../models/template.dart';
+import '../utils/shape_utils.dart';
 import '../utils/markdown_parser.dart';
 import '../utils/shape_utils.dart';
 
@@ -247,14 +248,14 @@ class RenderService {
 
     // === DRAW THE CONTENT BOX ===
     final rawRect = Rect.fromLTWH(boxX, boxY, boxWidth, boxHeight);
-    final boxPath = getCornerPath(rawRect, config.cornerStyle, config.cornerRadius);
+    final boxPath = ShapeUtils.getCardShape(config.cornerStyle, config.cornerRadius, rawRect);
 
     final boxBgColor = _getContentBoxColor(template);
 
     // Shadow for content box
     if (config.shadowEnabled) {
       final shadowPaint = Paint()
-        ..color = config.shadowColor
+        ..color = template.accentColor.withOpacity(0.4)
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, config.shadowBlur);
       
       canvas.save();
@@ -428,12 +429,12 @@ class RenderService {
         logoY = boxY + boxHeight - innerPadding - logoSize;
       }
 
-      // Draw tinted logo if needed (for now, just the raw recolored image)
+      // Draw tinted logo
       canvas.drawImageRect(
         logo,
         Rect.fromLTWH(0, 0, logo.width.toDouble(), logo.height.toDouble()),
         Rect.fromLTWH(logoX, logoY, logoSize, logoSize),
-        Paint()..filterQuality = FilterQuality.high,
+        Paint()..colorFilter = ColorFilter.mode(template.accentColor, BlendMode.srcIn)..filterQuality = FilterQuality.high,
       );
     }
   }

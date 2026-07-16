@@ -5,6 +5,7 @@ import '../providers/app_state_provider.dart';
 import '../theme/app_theme.dart';
 import '../utils/shape_utils.dart';
 import '../utils/markdown_parser.dart';
+import '../utils/shape_utils.dart';
 
 import '../widgets/custom_button.dart';
 
@@ -167,20 +168,10 @@ class _CardPreviewWidget extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.goldGlow.withOpacity(0.3),
-            blurRadius: 24,
-            spreadRadius: 4,
-          ),
-        ],
-      ),
       child: AspectRatio(
         aspectRatio: config.cardWidth / config.cardHeight,
         child: Container(
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             gradient: template.gradientEndColor != null
                 ? LinearGradient(
                     colors: [template.backgroundColor, template.gradientEndColor],
@@ -189,19 +180,25 @@ class _CardPreviewWidget extends StatelessWidget {
                   )
                 : null,
             color: template.gradientEndColor == null ? template.backgroundColor : null,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: template.accentColor.withOpacity(0.5), width: config.borderWidth > 0 ? config.borderWidth : 2.0),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: SizedBox(
-                width: config.cardWidth,
-                height: config.cardHeight,
-                child: _buildCardContent(config, template),
+            shape: CardShapeBorder(
+              style: config.cornerStyle,
+              radius: config.cornerRadius,
+              borderSide: BorderSide(
+                color: template.accentColor.withOpacity(0.5),
+                width: config.borderWidth > 0 ? config.borderWidth : 2.0,
               ),
             ),
+            shadows: config.shadowEnabled ? [
+              BoxShadow(
+                color: template.accentColor.withOpacity(0.4),
+                blurRadius: 24,
+                spreadRadius: 4,
+              ),
+            ] : null,
+          ),
+          child: ClipPath(
+            clipper: CardShapeClipper(config.cornerStyle, config.cornerRadius),
+            child: _buildCardContent(config, template),
           ),
         ),
       ),

@@ -51,9 +51,16 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context, appState, child) {
         // If in creation flow, show the appropriate screen
         if (appState.currentStep != CreationStep.home) {
-          return Scaffold(
-            backgroundColor: AppColors.background,
-            body: _buildCreationScreen(appState),
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) {
+              if (didPop) return;
+              appState.goBack();
+            },
+            child: Scaffold(
+              backgroundColor: AppColors.background,
+              body: _buildCreationScreen(appState),
+            ),
           );
         }
 

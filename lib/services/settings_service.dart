@@ -95,7 +95,7 @@ class SettingsService {
   int getDefaultBgColor() => prefs.getInt(AppConstants.keyDefaultBgColor) ?? 0xFF000000;
   Future<void> setDefaultBgColor(int color) => prefs.setInt(AppConstants.keyDefaultBgColor, color);
 
-  int getDefaultAccentColor() => prefs.getInt(AppConstants.keyDefaultAccentColor) ?? 0xFFFFD700;
+  int getDefaultAccentColor() => prefs.getInt(AppConstants.keyDefaultAccentColor) ?? 0xFFFFFFFF;
   Future<void> setDefaultAccentColor(int color) => prefs.setInt(AppConstants.keyDefaultAccentColor, color);
 
   int getAppThemePrimary() => prefs.getInt(AppConstants.keyAppThemePrimary) ?? 0xFFFFD700;

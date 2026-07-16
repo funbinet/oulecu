@@ -36,7 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onInputChanged() {
-    setState(() {}); // Rebuild to re-evaluate Next/Discard button states
+    final hasContent = _topicController.text.trim().isNotEmpty ||
+        _subtopicController.text.trim().isNotEmpty ||
+        _contentController.text.trim().isNotEmpty;
+    setState(() {
+      _hasContent = hasContent;
+    });
   }
 
   @override
@@ -77,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'assets/images/logo.png',
                   width: 28,
                   height: 28,
+                  color: AppColors.primaryGold,
                   errorBuilder: (_, __, ___) => Icon(
                     Icons.image,
                     color: AppColors.primaryGold,

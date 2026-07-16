@@ -232,17 +232,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   label: 'Handle',
                   controller: _handleController,
                   onChanged: (value) {
-                    final clean = value.startsWith('@') ? value : '@$value';
-                    _settings.setUserHandle(clean);
+                    _settings.setUserHandle(value);
                   },
-                  prefix: Text(
-                    '@',
-                    style: TextStyle(
-                      color: AppColors.primaryGold,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
               ],
             ),
