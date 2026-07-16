@@ -36,12 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onInputChanged() {
-    final hasContent = _topicController.text.trim().isNotEmpty ||
-        _subtopicController.text.trim().isNotEmpty ||
-        _contentController.text.trim().isNotEmpty;
-    setState(() {
-      _hasContent = hasContent;
-    });
+    setState(() {});
   }
 
   @override
